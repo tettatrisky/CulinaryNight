@@ -1,5 +1,6 @@
 package edu.unikom.culinarynight.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.unikom.culinarynight.data.model.Review
@@ -8,32 +9,42 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class ReviewViewModel : ViewModel() {
-    private val repository = FirebaseRepository()
-
+class ReviewViewModel(private val repo: FirebaseRepository = FirebaseRepository()) : ViewModel() {
     private val _reviews = MutableStateFlow<List<Review>>(emptyList())
     val reviews: StateFlow<List<Review>> = _reviews
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
-
     fun loadReviews(lokasi: String) {
         viewModelScope.launch {
-            repository.getReviewsForLocation(lokasi).collect { reviews ->
-                _reviews.value = reviews
+            repo.getReviewsForLocation(lokasi).collect { list ->
+                _reviews.value = list
             }
         }
     }
 
-    fun addReview(review: Review, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun addReview(
+        review: Review,
+        imageUri: Uri?,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
         viewModelScope.launch {
-            _isLoading.value = true
-            val result = repository.addReview(review)
-            result.fold(
-                onSuccess = { onSuccess() },
-                onFailure = { onError(it.message ?: "Failed to add review") }
-            )
-            _isLoading.value = false
+            try {
+                var photoUrl = ""
+                if (imageUri != null) {
+                    val remotePath = "reviews/${review.userId}/${System.currentTimeMillis()}.jpg"
+                    val res = repo.uploadImage(imageUri, remotePath)
+                    if (res.isSuccess) photoUrl = res.getOrNull() ?: ""
+                    else {
+                        onError(res.exceptionOrNull()?.message ?: "Upload failed")
+                        return@launch
+                    }
+                }
+                val reviewToSave = review.copy(photoUrl = photoUrl)
+                val addRes = repo.addReview(reviewToSave)
+                if (addRes.isSuccess) onSuccess() else onError(addRes.exceptionOrNull()?.message ?: "Failed saving review")
+            } catch (e: Exception) {
+                onError(e.message ?: "Error")
+            }
         }
     }
 }

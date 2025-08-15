@@ -2,12 +2,6 @@ package edu.unikom.culinarynight.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class PKLResponse(
-    @SerializedName("code") val code: Int,
-    @SerializedName("message") val message: String,
-    @SerializedName("data") val data: List<PKLData>,
-    @SerializedName("metadata") val metadata: List<Any>
-)
 
 data class PKLData(
     @SerializedName("kode_provinsi") val kodeProvinsi: Long,
@@ -18,5 +12,7 @@ data class PKLData(
     @SerializedName("jenis_usaha") val jenisUsaha: String,
     @SerializedName("jumlah_pkl") val jumlahPkl: Long,
     @SerializedName("satuan") val satuan: String,
-    @SerializedName("tahun") val tahun: Long
+    @SerializedName("tahun") val tahun: Long,
+    @SerializedName("latitude") val latitude: Double? = null,
+    @SerializedName("longitude") val longitude: Double? = null
 )

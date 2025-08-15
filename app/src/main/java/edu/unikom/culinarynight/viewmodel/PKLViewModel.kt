@@ -2,15 +2,14 @@ package edu.unikom.culinarynight.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import edu.unikom.culinarynight.data.local.AppDatabase
 import edu.unikom.culinarynight.data.model.PKLData
 import edu.unikom.culinarynight.data.repository.PKLRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class PKLViewModel : ViewModel() {
-    private val repository = PKLRepository()
-
+class PKLViewModel(private val repo: PKLRepository) : ViewModel() {
     private val _pklData = MutableStateFlow<List<PKLData>>(emptyList())
     val pklData: StateFlow<List<PKLData>> = _pklData
 
@@ -21,31 +20,36 @@ class PKLViewModel : ViewModel() {
     val errorMessage: StateFlow<String?> = _errorMessage
 
     init {
-        loadPKLData()
+        // collect cached data separately if needed (call site must provide repo.getCachedPKL())
+    }
+
+    fun setCachedCollector(cachedFlow: kotlinx.coroutines.flow.Flow<List<PKLData>>) {
+        viewModelScope.launch {
+            cachedFlow.collect {
+                _pklData.value = it
+            }
+        }
     }
 
     fun loadPKLData() {
         viewModelScope.launch {
             _isLoading.value = true
-            repository.getPKLData().collect { result ->
-                result.fold(
-                    onSuccess = { data ->
-                        _pklData.value = data
-                        _errorMessage.value = null
-                    },
-                    onFailure = { error ->
-                        _errorMessage.value = error.message
-                    }
-                )
+            repo.getPKLData().collect { result ->
                 _isLoading.value = false
+                result.fold(onSuccess = { list ->
+                    _pklData.value = list
+                    _errorMessage.value = null
+                }, onFailure = { e ->
+                    _errorMessage.value = e.message
+                })
             }
         }
     }
 
     fun searchPKL(query: String): List<PKLData> {
-        return _pklData.value.filter { pkl ->
-            pkl.lokasi.contains(query, ignoreCase = true) ||
-                    pkl.jenisUsaha.contains(query, ignoreCase = true)
+        val q = query.lowercase()
+        return _pklData.value.filter {
+            it.lokasi.lowercase().contains(q) || it.jenisUsaha.lowercase().contains(q)
         }
     }
 }

@@ -100,6 +100,15 @@ fun CulinaryNavigation(
                 onNavigateBack = {
                     navController.popBackStack()
                 },
+                onVoucherClick = {
+                    navController.navigate("voucher")
+                },
+                onReviewClick = {
+                    navController.navigate("review")
+                },
+                onAboutClick = {
+                    navController.navigate("about")
+                },
                 onLogout = {
                     authViewModel.signOut()
                     navController.navigate("login") {

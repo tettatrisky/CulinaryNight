@@ -1,21 +1,23 @@
+// File: app/build.gradle.kts
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
+    id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "edu.unikom.culinarynight"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "edu.unikom.culinarynight"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -51,13 +53,14 @@ android {
     }
 }
 
+// File: app/build.gradle.kts
+
 dependencies {
     // Core Android dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-
     // Compose BOM
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -71,6 +74,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx)
+    implementation("com.google.firebase:firebase-storage-ktx:20.2.1")
 
     // Network
     implementation(libs.retrofit)
@@ -79,13 +83,26 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.gson)
 
-    // Coroutines
-    implementation(libs.kotlinx.coroutines.android)
+    // Coroutines -- PASTIKAN BLOK INI SAMA PERSIS
+    implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.0"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core") // <-- Ini untuk awaitClose
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 
-    // Image Loading
+    // Image Loading (Coil)
     implementation(libs.coil.compose)
 
-    // Permissions
+    // Peta & Grafik
+    implementation("org.osmdroid:osmdroid-android:6.1.16")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    // Room (offline cache)
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+
+    // Lainnya
+    implementation("androidx.activity:activity-ktx:1.8.0")
     implementation(libs.accompanist.permissions)
 
     // Testing

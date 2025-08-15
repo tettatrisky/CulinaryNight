@@ -9,8 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class VoucherViewModel : ViewModel() {
-    private val repository = FirebaseRepository()
+// CORRECTED: ViewModel now accepts the repository from the factory
+class VoucherViewModel(private val repository: FirebaseRepository) : ViewModel() {
+    // DELETE this line: private val repository = FirebaseRepository()
 
     private val _availableVouchers = MutableStateFlow<List<Voucher>>(emptyList())
     val availableVouchers: StateFlow<List<Voucher>> = _availableVouchers

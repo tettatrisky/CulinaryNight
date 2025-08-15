@@ -1,16 +1,16 @@
 package edu.unikom.culinarynight.ui.screens.main
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack // Menggunakan AutoMirrored
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,6 +18,7 @@ import edu.unikom.culinarynight.data.model.PKLData
 import edu.unikom.culinarynight.ui.components.PKLCard
 import edu.unikom.culinarynight.ui.components.SearchBar
 import edu.unikom.culinarynight.viewmodel.PKLViewModel
+import edu.unikom.culinarynight.viewmodel.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,11 +26,19 @@ fun HomeScreen(
     onNavigateToPKLDetail: (PKLData) -> Unit,
     onNavigateToVoucher: () -> Unit,
     onNavigateToProfile: () -> Unit,
-    pklViewModel: PKLViewModel = viewModel()
 ) {
+    // --- PERUBAHAN UTAMA DI SINI ---
+    // 1. Dapatkan context saat ini
+    val context = LocalContext.current
+    // 2. Buat ViewModel menggunakan Factory yang sudah dibuat
+    val pklViewModel: PKLViewModel = viewModel(
+        factory = ViewModelFactory(context)
+    )
+    // ---------------------------------
+
     val pklData by pklViewModel.pklData.collectAsState()
     val isLoading by pklViewModel.isLoading.collectAsState()
-    val errorMessage by pklViewModel.errorMessage.collectAsState() // Ini adalah delegated property
+    val errorMessage by pklViewModel.errorMessage.collectAsState()
 
     var searchQuery by remember { mutableStateOf("") }
 
@@ -81,15 +90,11 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Search Bar
             SearchBar(
                 query = searchQuery,
                 onQueryChange = { searchQuery = it },
                 modifier = Modifier.padding(16.dp)
             )
-
-            // Ambil salinan lokal dari errorMessage di sini
-            val currentErrorMessage = errorMessage
 
             when {
                 isLoading -> {
@@ -101,7 +106,7 @@ fun HomeScreen(
                     }
                 }
 
-                currentErrorMessage != null -> { // Gunakan salinan lokal untuk pengecekan
+                errorMessage != null -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -117,7 +122,7 @@ fun HomeScreen(
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
-                                text = currentErrorMessage, // Gunakan salinan lokal untuk akses
+                                text = errorMessage!!,
                                 color = MaterialTheme.colorScheme.error,
                                 style = MaterialTheme.typography.bodyLarge
                             )

@@ -9,16 +9,30 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class CrowdMeterViewModel : ViewModel() {
-    private val repository = FirebaseRepository()
+// --- PERUBAHAN UTAMA DI SINI ---
+// Sekarang ViewModel menerima repository sebagai parameter
+class CrowdMeterViewModel(private val repository: FirebaseRepository) : ViewModel() {
+    // HAPUS baris ini: private val repository = FirebaseRepository()
 
     private val _crowdMeter = MutableStateFlow<CrowdMeter?>(null)
     val crowdMeter: StateFlow<CrowdMeter?> = _crowdMeter
 
+    private val _crowdHistory = MutableStateFlow<List<Pair<Long, Int>>>(emptyList())
+    val crowdHistory: StateFlow<List<Pair<Long, Int>>> = _crowdHistory
+
     fun loadCrowdLevel(lokasi: String) {
         viewModelScope.launch {
-            repository.getCrowdLevel(lokasi).collect { crowdMeter ->
-                _crowdMeter.value = crowdMeter
+            repository.getCrowdLevel(lokasi).collect { crowdData ->
+                _crowdMeter.value = crowdData
+            }
+        }
+        loadCrowdHistory(lokasi)
+    }
+
+    private fun loadCrowdHistory(lokasi: String) {
+        viewModelScope.launch {
+            repository.getCrowdHistory(lokasi).collect { historyData ->
+                _crowdHistory.value = historyData
             }
         }
     }
