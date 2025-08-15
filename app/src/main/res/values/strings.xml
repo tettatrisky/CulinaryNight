@@ -1,0 +1,78 @@
+<resources>
+    <string name="app_name">Culinary Night</string>
+    <string name="welcome_message">Selamat datang di Culinary Night</string>
+    <string name="pkl_description">Jelajahi PKL Terbaik di Bandung</string>
+
+    <!-- Auth strings -->
+    <string name="login_title">Masuk ke Akun</string>
+    <string name="register_title">Daftar Akun</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Konfirmasi Password</string>
+    <string name="full_name_hint">Nama Lengkap</string>
+    <string name="login_button">Masuk</string>
+    <string name="register_button">Daftar</string>
+    <string name="no_account">Belum punya akun? Daftar disini</string>
+    <string name="have_account">Sudah punya akun? Masuk disini</string>
+
+    <!-- Navigation strings -->
+    <string name="nav_home">Beranda</string>
+    <string name="nav_voucher">Voucher</string>
+    <string name="nav_profile">Profil</string>
+    <string name="nav_back">Kembali</string>
+
+    <!-- PKL strings -->
+    <string name="pkl_info">Informasi PKL</string>
+    <string name="pkl_type">Jenis Usaha</string>
+    <string name="pkl_count">Jumlah PKL</string>
+    <string name="pkl_location">Lokasi</string>
+    <string name="pkl_year">Tahun Data</string>
+    <string name="search_placeholder">Cari PKL atau jenis usaha...</string>
+
+    <!-- Review strings -->
+    <string name="reviews_title">Review</string>
+    <string name="add_review">Tambah Review</string>
+    <string name="rating_label">Rating</string>
+    <string name="comment_label">Komentar</string>
+    <string name="comment_placeholder">Tuliskan pengalaman Anda...</string>
+    <string name="submit_review">Kirim Review</string>
+    <string name="no_reviews">Belum ada review</string>
+
+    <!-- Voucher strings -->
+    <string name="vouchers_available">Voucher Tersedia</string>
+    <string name="my_vouchers">Voucher Saya</string>
+    <string name="claim_voucher">Klaim Voucher</string>
+    <string name="voucher_claimed">Voucher Diklaim</string>
+    <string name="voucher_used">Sudah Digunakan</string>
+    <string name="no_vouchers">Tidak ada voucher tersedia</string>
+    <string name="no_claimed_vouchers">Belum ada voucher yang diklaim</string>
+
+    <!-- Crowd meter strings -->
+    <string name="crowd_level">Tingkat Keramaian</string>
+    <string name="crowd_low">Sepi</string>
+    <string name="crowd_medium">Sedang</string>
+    <string name="crowd_high">Ramai</string>
+    <string name="update_crowd">Update Keramaian</string>
+    <string name="last_updated">Terakhir diperbarui</string>
+
+    <!-- Error strings -->
+    <string name="error_network">Gagal terhubung ke jaringan</string>
+    <string name="error_login">Gagal masuk</string>
+    <string name="error_register">Gagal mendaftar</string>
+    <string name="error_load_data">Gagal memuat data</string>
+    <string name="retry">Coba Lagi</string>
+
+    <!-- Success strings -->
+    <string name="success_login">Berhasil masuk</string>
+    <string name="success_register">Berhasil mendaftar</string>
+    <string name="success_review">Review berhasil ditambahkan</string>
+    <string name="success_voucher">Voucher berhasil diklaim</string>
+    <string name="success_crowd_update">Tingkat keramaian berhasil diperbarui</string>
+
+    <!-- Button strings -->
+    <string name="cancel">Batal</string>
+    <string name="submit">Kirim</string>
+    <string name="update">Update</string>
+    <string name="logout">Keluar</string>
+    <string name="refresh">Refresh</string>
+</resources>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "352642876835",
+    "project_id": "culinarynight",
+    "storage_bucket": "culinarynight.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352642876835:android:3953706d680dab54c90616",
+        "android_client_info": {
+          "package_name": "edu.unikom.culinarynight"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB13G9jkM2RfS-_9KgGiI4oyS28EysmjB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
